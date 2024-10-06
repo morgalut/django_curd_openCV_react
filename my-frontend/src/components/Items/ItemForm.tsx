@@ -2,6 +2,11 @@
 import React, { useState } from 'react';
 import { createItem } from '../../services/api';
 
+interface Item {
+  name: string;
+  description: string;
+}
+
 const ItemForm: React.FC = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -9,7 +14,8 @@ const ItemForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await createItem({ name, description });
+      const newItem: Item = { name, description };
+      const response = await createItem(newItem);
       console.log('Item created:', response.data);
       // Optionally reset form fields
       setName('');

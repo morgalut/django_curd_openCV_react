@@ -1,7 +1,6 @@
-// src/components/Auth/Login.tsx
 import React, { useState } from 'react';
 import { loginUser } from '../../services/api';
-import { toast } from 'react-toastify'; // Import toast
+import { toast } from 'react-toastify';
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -11,12 +10,14 @@ const Login: React.FC = () => {
     e.preventDefault();
     try {
       const response = await loginUser({ username, password });
-      console.log('User logged in:', response.data);
-      toast.success('Login successful!'); // Show success toast
-      // Store the token if needed
+      const { token } = response.data;
+      console.log('User logged in:', token);
+      toast.success('Login successful!');
+      localStorage.setItem('token', token); // Store the token
+      // You can redirect the user after login or show the logout button in the navbar
     } catch (error) {
       console.error('Error logging in:', error);
-      toast.error('Failed to log in. Please try again.'); // Show error toast
+      toast.error('Failed to log in. Please try again.');
     }
   };
 

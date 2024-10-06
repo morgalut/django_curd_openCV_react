@@ -5,8 +5,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.serializers import Serializer, CharField, EmailField
+from rest_framework.decorators import api_view, permission_classes
 
 class UserSerializer(Serializer):
     username = CharField(required=True)
@@ -45,3 +46,9 @@ class LoginView(generics.GenericAPIView):
             token, _ = Token.objects.get_or_create(user=user)
             return Response({'token': token.key}, status=status.HTTP_200_OK)
         return Response({'error': 'Invalid Credentials'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def items_view(request):
+    # Your logic for the items view here
+    return Response({'message': 'This is the items view'}, status=status.HTTP_200_OK)

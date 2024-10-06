@@ -1,24 +1,44 @@
 // src/services/api.ts
 import axios from 'axios';
 
+// Create an instance of axios with the base URL pointing to the Django backend
 const api = axios.create({
-  baseURL: 'http://localhost:8000/', // Update this with your Django server URL
+  baseURL: 'http://localhost:8000/', // Make sure this is the correct Django server URL
 });
 
-export const registerUser = (data: { username: string; email: string; password: string }) =>
+// Function to set authorization headers with the token from local storage
+const setAuthHeader = () => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    return { headers: { Authorization: `Token ${token}` } }; // Use 'Token' as in your curl command
+  }
+  return {};
+};
+
+// Fetch the list of items
+export const fetchItems = () => 
+  api.get('/items/', setAuthHeader()); // Include authorization header
+
+// Create a new item
+export const createItem = (data: { name: string; description: string }) => 
+  api.post('/items/', data, setAuthHeader()); // Include authorization header
+
+
+
+// Register a new user
+export const registerUser = (data: { username: string; email: string; password: string }) => 
   api.post('/register/', data);
 
-export const loginUser = (data: { username: string; password: string }) =>
+// Login an existing user
+export const loginUser = (data: { username: string; password: string }) => 
   api.post('/login/', data);
 
-export const fetchItems = () => api.get('/items/');
-export const createItem = (data: { name: string; description: string }) =>
-  api.post('/items/', data);
 
-// Add the uploadImage function here
-export const uploadImage = (formData: FormData) =>
+// Upload an image for processing
+export const uploadImage = (formData: FormData) => 
   api.post('/convert-image/', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
+      ...setAuthHeader().headers, // Include authorization header
     },
   });

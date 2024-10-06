@@ -111,6 +111,14 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = False  # Optional, restrict all origins
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Your React frontend
+]
 
+CORS_ALLOW_HEADERS = [
+    'authorization',
+    'content-type',
+]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

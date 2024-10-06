@@ -14,10 +14,6 @@ class ItemViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
-    
-    def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)
-
     def retrieve(self, request, *args, **kwargs):
         try:
             return super().retrieve(request, *args, **kwargs)
